@@ -25,10 +25,15 @@ class ReactCommand(sublime_plugin.EventListener):
 		active 		= ''
 		out 		= []
 		in_line  	= line.split('\n')
+		last_line 	= in_line[-1]
 		on_string 	= view.match_selector(locations[0], "meta.string.js")
+		on_attr 	= view.match_selector(locations[0], "meta.tag.attributes.js")
 		
 		if on_string:
 			return out
+		if on_attr and last_line[-1] != '{':
+			from .dataset.event import event
+			return [("%s \tEvent React" % s, "{0}={{$0}}".format(s)) for s in event]
 		if '// mui' in in_line[0:2]:
 			from .completion.mui import mui
 			from .dataset.mui_dataset import mui_dataset
