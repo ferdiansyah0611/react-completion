@@ -8,6 +8,8 @@ from .completion.router import router
 class ReactCommand(sublime_plugin.EventListener):
 	def __init__(self):
 		self.all_completions = react + redux + router
+		self.attr_completions = []
+		self.mui_completions = []
 	def on_query_completions(self, view, prefix, locations):
 		source 		= [
 			view.match_selector(locations[0], "source.jsx"),
@@ -32,12 +34,16 @@ class ReactCommand(sublime_plugin.EventListener):
 		if on_string:
 			return out
 		if on_attr and last_line[-1] != '{':
-			from .dataset.event import event
-			return [("%s \tEvent React" % s, "{0}={{$0}}".format(s)) for s in event]
+			if len(self.attr_completions) == 0:
+				from .dataset.event import event, attribute
+				self.attr_completions = [("%s \tEvent" % s, "{0}={{$0}}".format(s)) for s in event] + [("%s \tAttr" % s, 'dangerouslySetInnerHTML={{ __html: "" }}' if s == "dangerouslySetInnerHTML" else "{0}={{$0}}".format(s)) for s in attribute]
+			return self.attr_completions
 		if '// mui' in in_line[0:2]:
-			from .completion.mui import mui
-			from .dataset.mui_dataset import mui_dataset
-			out = out + mui + [("%s \tComponent MUI" % s, "<{0}>$0</{0}>".format(s)) for s in mui_dataset]
+			if len(self.mui_completions) == 0:
+				from .completion.mui import mui
+				from .dataset.mui_dataset import mui_dataset
+				self.mui_completions = mui + [("%s \tComponent MUI" % s, "<{0}>$0</{0}>".format(s)) for s in mui_dataset]
+			out = out + self.mui_completions
 		for completion in self.all_completions:
 			if completion and completion.trigger.find(r'{prefix}'):
 				out.append(completion)

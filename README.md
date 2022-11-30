@@ -50,7 +50,7 @@ mui-> or snippet-> or init->
 componentname-> example: Button->
 ```
 
-Event element camelCase
+Event & attribute element camelCase
 
 ```
 <div on->
