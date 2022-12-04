@@ -162,5 +162,6 @@ attribute = [
 	"style",
 	"title",
 	"ref",
-	"dangerouslySetInnerHTML"
+	"dangerouslySetInnerHTML",
+	"key"
 ]

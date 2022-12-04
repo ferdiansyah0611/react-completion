@@ -31,7 +31,10 @@ class ReactCommand(sublime_plugin.EventListener):
 		on_string 	= view.match_selector(locations[0], "meta.string.js")
 		on_attr 	= view.match_selector(locations[0], "meta.tag.attributes.js")
 		
-		if on_string:
+		if view.match_selector(locations[0], "meta.tag.attributes.js meta.interpolation.js source.js.embedded.jsx meta.mapping.js"):
+			from .dataset.style import style_object
+			return [("%s \tStyle" % s, "{0}: $0,".format(s)) for s in style_object]
+		if on_string or (on_attr and last_line[-1] == '{'):
 			return out
 		if on_attr and last_line[-1] != '{':
 			if len(self.attr_completions) == 0:
