@@ -39,8 +39,6 @@ use-> or navigate->
 Support Material UI Completion+Component with add `// mui` in line 0/1/2
 
 ```txt
-router->
-router-> or import->
 use-> or theme->
 use-> or mediaquery->
 mui-> or import->
@@ -50,8 +48,9 @@ mui-> or snippet-> or init->
 componentname-> example: Button->
 ```
 
-Event & attribute element camelCase
+Event, attribute, element element camelCase
 
 ```
 <div on->
+<div style={{ctrl+space}}
 ```
