@@ -12,6 +12,8 @@ class ReactCommand(sublime_plugin.EventListener):
 		self.mui_completions = []
 	def on_query_completions(self, view, prefix, locations):
 		source 		= [
+			view.match_selector(locations[0], "source.js"),
+			view.match_selector(locations[0], "source.ts"),
 			view.match_selector(locations[0], "source.jsx"),
 			view.match_selector(locations[0], "source.tsx"),
 		]
@@ -39,7 +41,15 @@ class ReactCommand(sublime_plugin.EventListener):
 		if on_attr and last_line[-1] != '{':
 			if len(self.attr_completions) == 0:
 				from .dataset.event import event, attribute
-				self.attr_completions = [("%s \tEvent" % s, "{0}={{$0}}".format(s)) for s in event] + [("%s \tAttr" % s, 'dangerouslySetInnerHTML={{ __html: "" }}' if s == "dangerouslySetInnerHTML" else "{0}={{$0}}".format(s)) for s in attribute]
+				self.attr_completions = []
+				self.attr_completions += [("%s \tEvent" % s, "{0}={{$0}}".format(s)) for s in event]
+				for s in attribute:
+					if s == "dangerouslySetInnerHTML":
+						self.attr_completions.append(("%s \tAttr" % s, 'dangerouslySetInnerHTML={{ __html: "" }}'))
+					if s == "key" or s == 'value':
+						self.attr_completions.append(("%s \tAttr" % s, "{0}={{$0}}".format(s)))
+					else:
+						self.attr_completions.append(("%s \tAttr" % s, "{0}=\"$0\"".format(s)))
 			return self.attr_completions
 		if '// mui' in in_line[0:2]:
 			if len(self.mui_completions) == 0:
