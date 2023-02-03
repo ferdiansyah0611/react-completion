@@ -67,7 +67,7 @@ react = [
 	sublime.CompletionItem(
 		"flush",
 		annotation="react",
-		completion="flushSync(() => {\n\t\n}, []);",
+		completion="flushSync(() => {\n\t\n});",
 		completion_format=sublime.COMPLETION_FORMAT_SNIPPET,
 		kind=sublime.KIND_SNIPPET
 	),
