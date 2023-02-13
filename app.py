@@ -10,6 +10,7 @@ class ReactCommand(sublime_plugin.EventListener):
 		self.all_completions = react + redux + router
 		self.attr_completions = []
 		self.mui_completions = []
+		self.object_type = ['key', 'value', 'style']
 	def on_query_completions(self, view, prefix, locations):
 		source 		= [
 			view.match_selector(locations[0], "source.js"),
@@ -46,7 +47,7 @@ class ReactCommand(sublime_plugin.EventListener):
 				for s in attribute:
 					if s == "dangerouslySetInnerHTML":
 						self.attr_completions.append(("%s \tAttr" % s, 'dangerouslySetInnerHTML={{ __html: "" }}'))
-					if s == "key" or s == 'value':
+					if s in self.object_type:
 						self.attr_completions.append(("%s \tAttr" % s, "{0}={{$0}}".format(s)))
 					else:
 						self.attr_completions.append(("%s \tAttr" % s, "{0}=\"$0\"".format(s)))
